@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kyra AI</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090d18;color:white;font-family:Arial,sans-serif}
+header{padding:22px;background:#111a2c;border-bottom:1px solid #26334c}
+.logo{font-size:27px;font-weight:bold;color:#8c7bff}
+header p{color:#aab2c8;margin-bottom:0}
+main{max-width:750px;margin:auto;padding:18px}
+#welcome{text-align:center;margin:75px 0 35px}
+#welcome h1{font-size:32px;color:#a99aff}
+#welcome p{color:#aab2c8}
+#chat{padding-bottom:100px}
+.msg{padding:14px 17px;border-radius:17px;margin:12px 0;max-width:90%;line-height:1.5;white-space:pre-wrap}
+.user{background:#5144a9;margin-left:auto}
+.bot{background:#19243a;border:1px solid #2c3b59}
+form{position:fixed;bottom:0;left:0;width:100%;padding:14px;background:#10182a;display:flex;gap:8px}
+input{flex:1;min-width:0;padding:15px;border-radius:25px;border:1px solid #394967;background:#202c42;color:white;font-size:16px}
+button{border:0;border-radius:50%;background:#8170ff;color:white;width:50px;font-size:20px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">✦ KYRA AI</div>
+<p>Your personal AI assistant</p>
+</header>
+<main>
+<div id="welcome">
+<h1>Hey! I'm Kyra ✨</h1>
+<p>Ask me anything. I'm here to help you.</p>
+</div>
+<div id="chat"></div>
+</main>
+<form id="form">
+<input id="message" placeholder="Message Kyra..." autocomplete="off">
+<button type="submit">➤</button>
+</form>
+<script>
+const form=document.getElementById("form");
+const input=document.getElementById("message");
+const chat=document.getElementById("chat");
+function add(text,who){
+const div=document.createElement("div");
+div.className="msg "+who;
+div.textContent=text;
+chat.appendChild(div);
+window.scrollTo(0,document.body.scrollHeight);
+}
+form.addEventListener("submit",function(e){
+e.preventDefault();
+const text=input.value.trim();
+if(!text)return;
+add(text,"user");
+input.value="";
+setTimeout(()=>{
+let answer="I'm Kyra AI! I'm currently in demo mode. My AI brain will be connected in the next step. ✨";
+if(/hello|hi|hey/i.test(text))answer="Hey there! ❤️ I'm Kyra. How can I help you?";
+else if(/your name/i.test(text))answer="My name is Kyra AI! ✨";
+else if(/who are you/i.test(text))answer="I'm Kyra, your personal AI assistant.";
+else if(/thank/i.test(text))answer="You're welcome! ❤️";
+add(answer,"bot");
+},500);
+});
+</script>
+</body>
+</html>
