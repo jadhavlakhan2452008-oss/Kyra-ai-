@@ -9,10 +9,10 @@
 *{box-sizing:border-box}
 body{margin:0;background:#090d18;color:white;font-family:Arial,sans-serif}
 header{padding:22px;background:#111a2c;border-bottom:1px solid #26334c}
-.logo{font-size:27px;font-weight:bold;color:#8c7bff}
+.logo{font-size:27px;font-weight:bold;color:#a99aff}
 header p{color:#aab2c8;margin-bottom:0}
 main{max-width:750px;margin:auto;padding:18px}
-#welcome{text-align:center;margin:75px 0 35px}
+#welcome{text-align:center;margin:65px 0 35px}
 #welcome h1{font-size:32px;color:#a99aff}
 #welcome p{color:#aab2c8}
 #chat{padding-bottom:100px}
@@ -44,6 +44,7 @@ button{border:0;border-radius:50%;background:#8170ff;color:white;width:50px;font
 const form=document.getElementById("form");
 const input=document.getElementById("message");
 const chat=document.getElementById("chat");
+
 function add(text,who){
 const div=document.createElement("div");
 div.className="msg "+who;
@@ -51,21 +52,31 @@ div.textContent=text;
 chat.appendChild(div);
 window.scrollTo(0,document.body.scrollHeight);
 }
-form.addEventListener("submit",function(e){
+
+form.addEventListener("submit",async function(e){
 e.preventDefault();
 const text=input.value.trim();
 if(!text)return;
 add(text,"user");
 input.value="";
-setTimeout(()=>{
-let answer="I'm Kyra AI! I'm currently in demo mode. My AI brain will be connected in the next step. ✨";
-if(/hello|hi|hey/i.test(text))answer="Hey there! ❤️ I'm Kyra. How can I help you?";
-else if(/your name/i.test(text))answer="My name is Kyra AI! ✨";
-else if(/who are you/i.test(text))answer="I'm Kyra, your personal AI assistant.";
-else if(/thank/i.test(text))answer="You're welcome! ❤️";
-add(answer,"bot");
-},500);
+const loading=document.createElement("div");
+loading.className="msg bot";
+loading.textContent="Kyra is thinking... ✨";
+chat.appendChild(loading);
+
+try{
+const response=await fetch("/api/chat",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({message:text})
+});
+const data=await response.json();
+loading.textContent=response.ok?data.reply:"Error: "+(data.error||"Please try again");
+}catch(error){
+loading.textContent="Connection error. Please try again.";
+}
 });
 </script>
 </body>
 </html>
+
